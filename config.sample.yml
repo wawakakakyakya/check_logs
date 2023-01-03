@@ -1,0 +1,32 @@
+log:
+  level: 0
+  path: ./dns_updater.log
+  max_size: 10
+  max_backups: 5
+  max_age: 7
+  compress: true
+smtp:
+  host: host@example.com
+  port: 587
+  userName: user1
+  passWord: password
+  timeout: 30
+  from: check_logs_by_mail@example.com
+files:
+  - fileName: /var/log/maillog
+    posFile:
+    maxLine: 0
+    words:
+      - word: aaa
+        skipThreshold: 5
+        subject: subject1
+        recipients:
+          - hoge1@example.com
+          - hoge2@example.com
+      - word: bbb
+        skipThreshold: 5
+        subject: subject2
+        recipients:
+          - hoge3@example.com
+          - hoge4@example.com
+
