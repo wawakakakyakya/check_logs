@@ -1,12 +1,21 @@
 package smtp
 
+import "strings"
+
 type SMTPData struct {
-	Recipients []string
-	Subject    string
-	Body       string
-	From       string
+	recipients []string
+	subject    string
+	msg        []byte
 }
 
-func NewSMTPData(recipients []string, subject string) *SMTPData {
-	return &SMTPData{Recipients: recipients, Subject: subject}
+const crlf = "\r\n"
+
+func (s *SMTPData) Body() []byte {
+	to := "To: " + strings.Join(s.recipients, ",")
+	subject := "Subject: " + s.subject + crlf
+	return []byte(strings.Join([]string{to, subject, string(s.msg)}, crlf))
+}
+
+func NewSMTPData(recipients []string, subject string, msg []byte) *SMTPData {
+	return &SMTPData{recipients: recipients, subject: subject, msg: msg}
 }

@@ -18,6 +18,6 @@ build_linux: clean set_amd64 build
 build_arm: clean set_arm build
 
 clean:
-	rm -f ${fileName}
+	rm -f ${fileName}_for_*
 test:
-	./${fileName} -dest ../ -src ../
+	./${fileName}_for_$(arch) -dest ../ -src ../

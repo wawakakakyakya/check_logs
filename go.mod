@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/wawakakakyakya/GolangLogger v0.0.0-20230102021158-161d68be3878
-	github.com/wawakakakyakya/configloader v0.0.0-20221224051153-af4d8546ce2c
+	github.com/wawakakakyakya/configloader v0.0.0-20230107072900-69333e67164f
 )
 
 require (
