@@ -18,7 +18,9 @@ files:
     posFile: maillog.pos
     maxLine: 0
     words:
-      - word: aaa
+      - target_word: aaa
+        stop_words:
+          - from localhost
         skipThreshold: 5
         subject: subject1
         recipients:

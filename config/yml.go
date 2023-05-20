@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/wawakakakyakya/check_logs_by_mail/smtp"
 	yml "github.com/wawakakakyakya/configloader/yml"
 )
 
@@ -17,14 +18,24 @@ type GlobalConfig struct {
 	SMTP      *SMTPConfig `yaml:"smtp"`
 }
 
-func setRegexp(files []*FileConfig) error {
+func initConfig(files []*FileConfig) error {
 	for _, fc := range files {
 		for _, w := range fc.Words {
-			reg, err := regexp.Compile(w.Word)
+			targetReg, err := regexp.Compile(w.TargetWord)
 			if err != nil {
 				return err
 			}
-			w.Regexp = reg
+			w.SMTPData = smtp.NewSMTPData(w.Recipients, w.Subject)
+			w.TargetRegexp = targetReg
+			for _, s := range w.StopWords {
+				stopReg, err := regexp.Compile(s)
+				if err != nil {
+					return err
+				}
+				w.StopRegexps = append(w.StopRegexps, stopReg)
+			}
+
+			w.SMTPData = smtp.NewSMTPData(w.Recipients, w.Subject)
 		}
 	}
 	return nil
@@ -39,7 +50,7 @@ func LoadYamlConfig() (YamlConfigs, error) {
 	if err != nil {
 		return ycArray, err
 	}
-	if err := setRegexp(ycArray.Files); err != nil {
+	if err := initConfig(ycArray.Files); err != nil {
 		fmt.Println("[ERROR]set regexp failed")
 		return ycArray, err
 	}

@@ -20,11 +20,12 @@ func Main(fc *config.FileConfig, logger *gologger.Logger, mailQueue chan *smtp.S
 	}
 
 	logParser := NewLogParser(fc, logger)
-	readSize, rotated, err := fileParser.Parse(fileParser.Config.FileName, logParser, mailQueue)
+	readSize, rotated, err := fileParser.Parse(fileParser.Config.FileName, logParser)
 	if err != nil {
 		logger.Error(err.Error())
 		return
 	}
+
 	var lastLine int64
 	if rotated {
 		lastLine = readSize

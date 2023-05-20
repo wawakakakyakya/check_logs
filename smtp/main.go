@@ -5,21 +5,21 @@ import (
 	"sync"
 
 	gologger "github.com/wawakakakyakya/GolangLogger"
-	"github.com/wawakakakyakya/check_logs_by_mail/config"
 )
 
-func Main(config *config.SMTPConfig, queue chan *SMTPData, cancelCtx context.Context, logger *gologger.Logger, wg *sync.WaitGroup) {
+func Main(host string, port int, userName string, password string, timeout int, from string, queue chan *SMTPData, cancelCtx context.Context, logger *gologger.Logger, wg *sync.WaitGroup) {
 
 	defer wg.Done()
 	smtpLogger := logger.Child("smtpMain")
 	smtpLogger.Debug("start sendMail process")
 
-	smtpClient := NewSMTPClient(config.Host, config.Port, config.UserName, config.PassWord, config.Timeout, config.From, smtpLogger)
+	smtpClient := NewSMTPClient(host, port, userName, password, timeout, from, smtpLogger)
 	for {
 		smtpLogger.Info("waiting mailqueue...")
 		select {
 		case smtpData := <-queue:
 			smtpLogger.Info("send mail")
+			smtpLogger.DebugF("process smtpDate: %v", smtpData)
 			if err := smtpClient.Send(smtpData); err != nil {
 				smtpLogger.Error("send mail failed")
 				smtpLogger.Error(err.Error())
