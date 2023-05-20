@@ -8,12 +8,6 @@ import (
 	"github.com/wawakakakyakya/check_logs_by_mail/smtp"
 )
 
-func sendResult(fc *config.FileConfig, mailQueue chan *smtp.SMTPData) {
-	for _, wc := range fc.Words {
-		mailQueue <- wc.SMTPData
-	}
-}
-
 // ファイル処理のエントリーポイント
 func Main(fc *config.FileConfig, logger *gologger.Logger, mailQueue chan *smtp.SMTPData, wg *sync.WaitGroup) {
 
@@ -24,7 +18,7 @@ func Main(fc *config.FileConfig, logger *gologger.Logger, mailQueue chan *smtp.S
 		logger.Error(err.Error())
 		return
 	}
-	sendResult(fc, mailQueue)
+
 	logParser := NewLogParser(fc, logger)
 	readSize, rotated, err := fileParser.Parse(fileParser.Config.FileName, logParser)
 	if err != nil {
