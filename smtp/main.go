@@ -19,6 +19,7 @@ func Main(host string, port int, userName string, password string, timeout int, 
 		select {
 		case smtpData := <-queue:
 			smtpLogger.Info("send mail")
+			smtpLogger.DebugF("process smtpDate: %v", smtpData)
 			if err := smtpClient.Send(smtpData); err != nil {
 				smtpLogger.Error("send mail failed")
 				smtpLogger.Error(err.Error())

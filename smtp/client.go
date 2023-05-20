@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net"
 	"net/smtp"
+	"strings"
 	"time"
 
 	// "github.com/wawakakakyakya/check_logs_by_mail/localnet/smtp"
@@ -141,7 +142,7 @@ func (s *SMTPClient) Send(data *SMTPData) error {
 		if err != nil {
 			return err
 		} else {
-			s.logger.Debug("send mail was ended normally")
+			s.logger.DebugF("mail was sended to %s normally", strings.Join(data.recipients, ","))
 		}
 	case <-timeout.Done():
 		return fmt.Errorf("send mail failed by timeout(%dsec)", s.timeout)

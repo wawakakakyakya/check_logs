@@ -61,6 +61,8 @@ func (f *File) Parse(path string, logparser *LogParser) (int64, bool, error) {
 
 	fp.Seek(f.PosFile.LastLine, 0)
 	f.logger.DebugF("move to lastline(%d) in %s", f.PosFile.LastLine, path)
+
+	// ローテーションと実ログの処理
 	readSize, err = logparser.Parse(fp, path, f.Config.Words)
 
 	return int64(readSize), rotated, err

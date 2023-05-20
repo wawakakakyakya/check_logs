@@ -14,10 +14,12 @@ type FileConfig struct {
 }
 
 type WordConfig struct {
-	Word          string   `yaml:"word"` // regexp
+	TargetWord    string   `yaml:"targetWord"` // regexp
+	StopWords     []string `yaml:"stopWords"`  // regexp
 	SkipThreshold int      `yaml:"skipThreshold"`
 	Subject       string   `yaml:"subject"`
 	Recipients    []string `yaml:"recipients"`
-	Regexp        *regexp.Regexp
+	TargetRegexp  *regexp.Regexp
+	StopRegexps   []*regexp.Regexp
 	SMTPData      *smtp.SMTPData
 }

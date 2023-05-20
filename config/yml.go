@@ -21,12 +21,21 @@ type GlobalConfig struct {
 func initConfig(files []*FileConfig) error {
 	for _, fc := range files {
 		for _, w := range fc.Words {
-			reg, err := regexp.Compile(w.Word)
+			targetReg, err := regexp.Compile(w.TargetWord)
 			if err != nil {
 				return err
 			}
 			w.SMTPData = smtp.NewSMTPData(w.Recipients, w.Subject)
-			w.Regexp = reg
+			w.TargetRegexp = targetReg
+			for _, s := range w.StopWords {
+				stopReg, err := regexp.Compile(s)
+				if err != nil {
+					return err
+				}
+				w.StopRegexps = append(w.StopRegexps, stopReg)
+			}
+
+			w.SMTPData = smtp.NewSMTPData(w.Recipients, w.Subject)
 		}
 	}
 	return nil
